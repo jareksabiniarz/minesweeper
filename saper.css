@@ -1,0 +1,117 @@
+body
+{
+	background-color: #DFDFDF;
+}
+
+#game					/*# to selektor po id*/
+{
+	width: 300px;
+	height:420px;
+	position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+	background-color: #ABABAB;
+	box-sizing: border-box;
+	border-radius: 5px;
+}
+
+#restart, #counter, #manual
+{
+	background-color: #BBBBBB;
+	width: 290px;
+	height: 35px;
+	margin-left: 5px;
+	margin-top: 5px;
+	border-radius: 5px;
+	font-family: 'Skranji', cursive;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+}
+
+#manual
+{
+	font-size: 12px;
+	text-align: left;
+}
+
+#restart
+{
+	cursor: pointer;
+	font-size: 30px;
+}
+
+#field
+{
+	width: 274px;
+	height: 274px;
+	position: absolute;
+	bottom: 13px;
+	left: 13px;
+	background-color: #009900;
+	border: 2px solid #EEEEEE;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+
+
+.square_empty, .square_bomb, .square_exploded, .square_disarmed, .square_checked
+{
+	width: 28px;
+	height: 28px;
+	text-align: center;
+	margin: 1px;
+	border: 1px solid #000000;
+	float: left;
+	cursor: pointer;
+	border-radius: 2px;
+	background-color: #666666;
+	box-sizing: border-box;
+	font-size: 15px;
+	text-align: center;
+	font-family: 'Skranji', cursive;
+	vertical-align: middle;
+}
+
+.square_exploded				/*clicked square with bomb*/
+{
+	background-color: #FF0000;
+}
+
+.square_disarmed				/*clicked square with no bomb*/
+{
+	background-color: #BBBBBB;
+	cursor: default;
+}
+
+.square_checked				/*checked square*/
+{
+	width: 28px;
+	height: 28px;
+	text-align: center;
+	margin: 1px;
+	border: 1px solid #000000;
+	float: left;
+	cursor: pointer;
+	border-radius: 2px;
+	background-color: #906090;		/*violet*/
+	box-sizing: border-box;
+	font-size: 15px;
+	text-align: center;
+	font-family: 'Skranji', cursive;
+	vertical-align: middle;
+}
+
+.square_empty:hover, .square_bomb:hover	/*square without / with bomb hover*/
+{
+	background-color: #e9b64a;
+}
+
+
+
+
+
+
