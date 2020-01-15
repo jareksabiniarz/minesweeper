@@ -1,65 +1,67 @@
-var n = 81; 			// number of tiles
-var k = 12; 			// number of bombs
-var click_qty = 0;		// counter of disarms
-var countdown = n-k; 	// counter of disarms without kaboom
+var n = 81; // liczba pól
+var k = 12; // liczba bomb
+var click_qty = 0; // licznik kliknięć
+var countdown = n-k; // liczba klknięć bez trafienia bomby
 	
-function restart()		//tiles locating
+function restart()				// funkcja rozmieszczająca kafelki pola
 {
 	click_qty=0;
-	document.getElementById("counter").innerHTML=(countdown+" fields without bomb");
-	var m = n;							// counter for draw
-	var	bomb_index = new Array(k);		// array with size equal to number of bombs
-	var draw = new Array(m);			// array for drawing indexes
+	document.getElementById("counter").innerHTML=(countdown+" pól do końca");
+	var m = n;							// licznik tylko do losowania
+	var	bomb_index = new Array(k);		// utworzenie tablicy do przechowania indeksów bomb o rozmiarze równym liczbie bomb
+	var draw = new Array(m);			// utworzenie tablicy z której losujemy indeksy o rozmiarze liczby pól
 	
-/*drawing indexes for armed tiles*/
-	for (i=0; i<m; i++) 				// filling array by indexes 0,1,2...n-1
+/*losowanie pól z bombami*/
+	for (i=0; i<m; i++) 				// wypełnianie tablicy draw liczbami 0,1,2...n-1
 	{
 		draw[i] = i;
 	}
-	for (var i=0; i<k; i++) 			// drawing k indexes of bombed tiles
+	for (var i=0; i<k; i++) 				// losowanie k indeksów bomb
 	{	
-		var r = Math.round(Math.random()*(m-1)); // random index between 0 and 80, this is m-1
-		bomb_index[i]=draw[r];		//adding drawed number to array
-		draw[r] = draw[m-1]; 		//to avoid redundation the last element from array replaces just drawed element
-		m--;						//and is removed from the last position
+		var r = Math.round(Math.random()*(m-1)); // tworzenie losowego indeksu pomiędzy 0 i 80 czyli m-1
+		bomb_index[i]=draw[r];		//uzupełnianie tablicy indeksów bomb o wylosowaną liczbę
+		draw[r] = draw[m-1]; // przeniesienia ostatniego elementu do miejsca z którego wylosowano, żeby nie było powtórzeń
+		m--;					//wywalenie ostatniego elementu tablicy
 	}
 		
-/*filling the game field by tiles with and without bombs*/
-	var field_squares="";				//empty element
+/*uzupełnianie pola klockami z bombami i bez*/
+	var field_squares="";			//pusty element
 	for(i=0; i<n; i++)
-	{	if(bomb_index[0]==i||bomb_index[1]==i||bomb_index[2]==i||bomb_index[3]==i||bomb_index[4]==i||bomb_index[5]==i||bomb_index[6]==i||bomb_index[7]==i||bomb_index[8]==i||bomb_index[9]==i||bomb_index[10]==i||bomb_index[11]==i)	//if i is the bomb tile index
+	{	if(bomb_index.includes(i))	//jeżeli i jest indeksem pola z bombą
 		{
-			field_squares=field_squares+'<div class="square_bomb" id="k_n'+i+'" onclick="explosion(this.id)" onmousedown="which_button(event, this.id)"></div>'; //manufacturing of divs
+			field_squares=field_squares+'<div class="square_bomb" id="k_n'+i+'" onclick="explosion(this.id)" onmousedown="which_button(event, this.id)"></div>'; //tworzenie w pętli divów
 		}
-		else					//if i is not bombed tile
+		else					//jeżeli i nie jest indeksem pola z bombą
 		{
 			field_squares=field_squares+'<div class="square_empty" id="k_n'+i+'" onclick="bomb_closeness(this.id)" onmousedown="which_button(event, this.id)"></div>';
 		}
 	}
-	document.getElementById("field").innerHTML = field_squares; 
+	
+/*uzupełnienie pola klockami*/
+	document.getElementById("field").innerHTML = field_squares; // wyświetlanie divów w polu
 	
 }
 
-/*when you explode*/
+/*co sie stanie gdy trafi się na bombę*/
 function explosion(clicked_id)				
 {
-	alert("Ka-boom!"); 
-	document.getElementById(clicked_id).className ="square_exploded"; // adding class to clicked tile
-	setTimeout(function() {restart()}, 1000);			//delay of restart
+	alert("Trafiłeś na bombę!"); 
+	document.getElementById(clicked_id).className ="square_exploded"; // przypisanie klikniętemu elementowi klasy
+	setTimeout(function() {restart()}, 1000);			//opóźnienie restartu
 }
 	
-/*counting how many bombs coincide to clicked tile*/	
+/*funkcja licząca ile obok jest bomb i dla klocków bez bomb*/	
 function bomb_closeness(current_id)
 {
 	if(document.getElementById(current_id).innerHTML=="")
 	{
 		document.getElementById(current_id).className="square_disarmed";
 		click_qty++;
-		document.getElementById("counter").innerHTML=(countdown-click_qty+" fields without bomb");
-		var calc_id = Number(current_id.slice(3));  //removing thre fisrt signs from id, this is k_n
+		document.getElementById("counter").innerHTML=(countdown-click_qty+" pól do końca");
+		var calc_id = Number(current_id.slice(3));  //wyciecie z id trzech pierwszych znaków, czyli k_n
 		var bomb_counter = 0;
 		var id_1 = calc_id-10;		
-		var id_2 = calc_id-9;		//variables storing indexes of 8 nearest fields
+		var id_2 = calc_id-9;		//utworzenie zmiennych przechowujących id 8 sąsiednich pól
 		var id_3 = calc_id-8;
 		var id_4 = calc_id-1;
 		var id_5 = calc_id+1;
@@ -67,28 +69,28 @@ function bomb_closeness(current_id)
 		var id_7 = calc_id+9;
 		var id_8 = calc_id+10;
 		
-		var neighbors_index = [id_1, id_2, id_3, id_4, id_5, id_6, id_7, id_8]; //variables as array
+		var neighbors_index = [id_1, id_2, id_3, id_4, id_5, id_6, id_7, id_8]; //stablicowanie zmiennych 
 		
-		for(i=0; i<8; i++)	//increasing bomb counter
+		for(i=0; i<8; i++)	//pętla do zwiększania licznika bomb
 		{
-			var loop_id = neighbors_index[i]; //variable receiving ids of neighbours
+			var loop_id = neighbors_index[i]; //zmienna przyjmująca kolejno wartości id sąsiednich pól do klikniętego
 			
-			if (loop_id > 80 || loop_id < 0) {continue}; 		//to avoid non-existing tiles when we are near edge and there are no neighbours
+			if (loop_id > 80 || loop_id < 0) {continue}; //żeby nie łapało nieistniejących id za krawędziami pola
 			if (calc_id%9==0 && i==0) {continue};
 			if (calc_id%9==0 && i==3) {continue};
-			if (calc_id%9==0 && i==5) {continue}; 				
+			if (calc_id%9==0 && i==5) {continue}; // żeby dla elementu przy lewej krawędzi nie brało pod uwagę bomb przy prawej krawędzi
 			if (calc_id%9==8 && i==2) {continue};
 			if (calc_id%9==8 && i==4) {continue};
-			if (calc_id%9==8 && i==7) {continue}; 				
+			if (calc_id%9==8 && i==7) {continue}; // żeby dla elementu przy prawej krawędzi nie brało pod uwagę bomb przy lewej krawędzi
 			if(document.getElementById("k_n"+loop_id).classList.contains("square_bomb")) bomb_counter++;
 		}
 
 		document.getElementById(current_id).innerHTML=bomb_counter;
 	}
 	
-/*win*/
+/*wygrana*/
 
-	if (click_qty==countdown) {alert("You won!")};
+	if (click_qty==countdown) {alert("Wygrałeś! Gratulacje!")};
 }
 
 function which_button(event, clicked_id) 
